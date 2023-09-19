@@ -13,12 +13,14 @@ jobs:
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
         
+      - name: Get study date
+        id: study-date
+        run: echo "::set-output name=date::$(date -d '16 hours' +%Y.%m.%d)"
+        
       - name: POST List of Presenters to Slack
         shell: bash
         run: | 
-          NOW_DATE=$(date +%Y.%m.%d)
-          STUDY_DATE=$(date -d '16 hours' +%Y.%m.%d)
-          MESSAGE+="${STUDY_DATE} 발표자 뽑기 결과 \n--------------------------------\n"
+          MESSAGE+="${{steps.date.outputs.study-date}} 발표자 뽑기 결과 \n--------------------------------\n"
 
           all_team_members=("수민" "서연" "형선" "슬" "주연" "수현" "철희" "유리" "지훈")
 
@@ -42,9 +44,9 @@ jobs:
               MESSAGE+="\n"
           done
         
-          MESSAGE+= ${NOW_DATE}
+          MESSAGE+= ${{steps.date.outputs.date}}
           MESSAGE+="\n"
-          MESSAGE+= ${STUDY_DATE}
+          MESSAGE+= ${{steps.date.outputs.study-date}}
         
           curl -X POST --data-urlencode "payload={\"channel\": \"#playground\", \"username\": \"뽑기봇\", \"text\": \"${MESSAGE}\", \"icon_emoji\": \":ghost:\"}" {% raw %}${{ secrets.SLACK_WEBHOOK_URL }}{% endraw %}
 
