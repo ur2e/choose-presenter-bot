@@ -48,6 +48,6 @@ jobs:
           MESSAGE+="\n"
           MESSAGE+="${{ steps.date.outputs.study-date }} "
         
-          curl -X POST --data-urlencode "payload={\"channel\": \"#playground\", \"username\": \"뽑기봇\", \"text\": \"${MESSAGE}\", \"icon_emoji\": \":ghost:\"}" {% raw %}${{ secrets.SLACK_WEBHOOK_URL }}{% endraw %}
+          curl -X POST --data-urlencode "payload={\"channel\": \"#playground\", \"username\": \"뽑기봇\", \"text\": \"${MESSAGE}\", \"icon_emoji\": \":ghost:\"}" ${{ secrets.SLACK_WEBHOOK_URL }}
 
           
