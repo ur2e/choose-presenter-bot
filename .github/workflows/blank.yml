@@ -15,20 +15,16 @@ jobs:
       - name: POST List of Presenters to Slack
         shell: bash
         run: | 
-          # 날짜 정보
           NOW_DATE=$(date +%Y.%m.%d)
           STUDY_DATE=$(date -d '16 hours' +%Y.%m.%d)
           MESSAGE+="${STUDY_DATE} 발표자 뽑기 결과 \n--------------------------------\n"
-          # 전체 팀원 리스트
+
           all_team_members=("수민" "서연" "형선" "슬" "주연" "수현" "철희" "유리" "지훈")
 
-          # 제외할 팀원 리스트
           exclude_team_members=("수민")
 
-          # 주제 리스트
           topics=("주제1" "주제2" "주제3" "주제4")
           
-          # 4명을 선택하기 위한 무작위 샘플링
           selected_team_members=()
           while [ ${#selected_team_members[@]} -lt 4 ]; do
               random_member=${all_team_members[$((RANDOM % ${#all_team_members[@]}))]}
@@ -38,7 +34,6 @@ jobs:
               fi
           done
 
-          # 선택된 팀원과 주제를 매칭하고 결과를 출력
           for i in "${!selected_team_members[@]}"; do
               member="${selected_team_members[$i]}"
               topic="${topics[$i]}"
@@ -46,7 +41,6 @@ jobs:
               MESSAGE+="\n"
           done
         
-          # 슬랙 채널로 메시지 요청
           MESSAGE+= ${NOW_DATE}
           MESSAGE+="\n"
           MESSAGE+= ${STUDY_DATE}
