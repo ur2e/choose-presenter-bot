@@ -2,7 +2,7 @@ name: choose_presenter_bot
 
 on:
   schedule: 
-    - cron: "* * * * *"
+    - cron: '00 18,19,20,21,22,23 * * 2,3,4'
 
 jobs:
   choose_presenter_bot:
