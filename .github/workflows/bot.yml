@@ -2,31 +2,33 @@ name: choose_presenter_bot
 
 on:
   schedule: 
-    - cron: '00 18,19,20,21,22,23 * * 2,3,4'
+    - cron: '00 00 * * 3' # 매주 수요일 오전 9시
 
 jobs:
   choose_presenter_bot:
     runs-on: ubuntu-latest
     steps: 
-      - name: Checkout
-        uses: actions/checkout@v2
-      
+      - name: Get current date
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+        
+      - name: Get study date
+        id: study-date
+        run: echo "study-date=$(date -d '16 hours' +%Y.%m.%d)" >> $GITHUB_OUTPUT
+        
       - name: POST List of Presenters to Slack
         shell: bash
         run: | 
-          # 날짜 정보
-          NOW_DATE=$(date +%Y.%m.%d)
-          STUDY_DATE=$(date -d '16 hours' +%Y.%m.%d)
-          MESSAGE+="${STUDY_DATE} 발표자 뽑기 결과 \n--------------------------------\n"
+          MESSAGE+="${{steps.study-date.outputs.study-date}}일 스터디 발표자 뽑기 결과 \n----------------------------------\n"
+
           # 전체 팀원 리스트
           all_team_members=("수민" "서연" "형선" "슬" "주연" "수현" "철희" "유리" "지훈")
 
-          # 제외할 팀원 리스트
+          # 발표 제외할 팀원 리스트
           exclude_team_members=("수민")
 
-          # 주제 리스트
           topics=("주제1" "주제2" "주제3" "주제4")
-          
+
           # 4명을 선택하기 위한 무작위 샘플링
           selected_team_members=()
           while [ ${#selected_team_members[@]} -lt 4 ]; do
@@ -44,12 +46,8 @@ jobs:
               MESSAGE+="$member - $topic"
               MESSAGE+="\n"
           done
-        
+          
           # 슬랙 채널로 메시지 요청
-          MESSAGE+= ${NOW_DATE}
-          MESSAGE+="\n"
-          MESSAGE+= ${STUDY_DATE}
-        
-          curl -X POST --data-urlencode "payload={\"channel\": \"#playground\", \"username\": \"뽑기봇\", \"text\": \"${MESSAGE}\", \"icon_emoji\": \":ghost:\"}" {% raw %}${{ secrets.SLACK_WEBHOOK_URL }}{% endraw %}
+          curl -X POST --data-urlencode "payload={\"channel\": \"#playground\", \"username\": \"뽑기봇\", \"text\": \"${MESSAGE}\", \"icon_emoji\": \":ghost:\"}" ${{ secrets.SLACK_WEBHOOK_URL }}
 
           
