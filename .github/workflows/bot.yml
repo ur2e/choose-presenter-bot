@@ -48,6 +48,6 @@ jobs:
           done
           
           # 슬랙 채널로 메시지 요청
-          curl -X POST --data-urlencode "payload={\"channel\": \"#playground\", \"username\": \"뽑기봇\", \"text\": \"${MESSAGE}\", \"icon_emoji\": \":ghost:\"}" ${{ secrets.SLACK_WEBHOOK_URL }}
+          curl -X POST --data-urlencode "payload={\"channel\": \"#playground\", \"username\": \"뽑기봇\", \"text\": \"${MESSAGE}\"}" ${{ secrets.SLACK_WEBHOOK_URL }}
 
           
