@@ -22,12 +22,15 @@ jobs:
         run: | 
           MESSAGE+="${{steps.study-date.outputs.study-date}}일 스터디 발표자 뽑기 결과 \n----------------------------------\n"
 
+          # 전체 팀원 리스트
           all_team_members=("수민" "서연" "형선" "슬" "주연" "수현" "철희" "유리" "지훈")
 
+          # 발표 제외할 팀원 리스트
           exclude_team_members=("수민")
 
           topics=("주제1" "주제2" "주제3" "주제4")
-          
+
+          # 4명을 선택하기 위한 무작위 샘플링
           selected_team_members=()
           while [ ${#selected_team_members[@]} -lt 4 ]; do
               random_member=${all_team_members[$((RANDOM % ${#all_team_members[@]}))]}
@@ -37,16 +40,15 @@ jobs:
               fi
           done
 
+          # 선택된 팀원과 주제를 매칭하고 결과를 출력
           for i in "${!selected_team_members[@]}"; do
               member="${selected_team_members[$i]}"
               topic="${topics[$i]}"
               MESSAGE+="$member - $topic"
               MESSAGE+="\n"
           done
-        
-          MESSAGE+="${{ steps.date.outputs.date }} "
-          MESSAGE+="\n"
-        
+          
+          # 슬랙 채널로 메시지 요청
           curl -X POST --data-urlencode "payload={\"channel\": \"#playground\", \"username\": \"뽑기봇\", \"text\": \"${MESSAGE}\", \"icon_emoji\": \":ghost:\"}" ${{ secrets.SLACK_WEBHOOK_URL }}
 
           
