@@ -20,7 +20,7 @@ jobs:
       - name: POST List of Presenters to Slack
         shell: bash
         run: | 
-          MESSAGE+="${{steps.study-date.outputs.study-date}} 발표자 뽑기 결과 \n--------------------------------\n"
+          MESSAGE+="${{steps.study-date.outputs.study-date}}일 스터디 발표자 뽑기 결과 \n----------------------------------\n"
 
           all_team_members=("수민" "서연" "형선" "슬" "주연" "수현" "철희" "유리" "지훈")
 
@@ -45,8 +45,6 @@ jobs:
           done
         
           MESSAGE+="${{ steps.date.outputs.date }} "
-          MESSAGE+="\n"
-          MESSAGE+="${{ steps.date.outputs.study-date }} "
           MESSAGE+="\n"
         
           curl -X POST --data-urlencode "payload={\"channel\": \"#playground\", \"username\": \"뽑기봇\", \"text\": \"${MESSAGE}\", \"icon_emoji\": \":ghost:\"}" ${{ secrets.SLACK_WEBHOOK_URL }}
