@@ -1,9 +1,6 @@
 name: bot_test
 
-on:
-  issues:
-    types:
-      - opened
+on: workflow_dispatch
 
 jobs:
   choose_presenter_bot:
