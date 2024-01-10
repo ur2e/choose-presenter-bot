@@ -6,7 +6,7 @@ jobs:
     name: ping
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: ./
+      - name: Ping my site
+        uses: Leocardoso94/is-my-site-up@v1.2    
         with:
           site: "https://6556-218-155-31-211.ngrok-free.app"
