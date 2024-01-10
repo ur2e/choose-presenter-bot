@@ -1,8 +1,9 @@
 name: choose_presenter_bot
 
-on:
-  schedule: 
-    - cron: '30 23 * * *' # 매주 오전 8시 30분
+on: workflow_dispatch
+#on:
+#  schedule: 
+#    - cron: '30 23 * * *' # 매주 오전 8시 30분
 
 jobs:
   choose_presenter_bot:
